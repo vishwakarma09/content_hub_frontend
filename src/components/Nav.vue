@@ -1,3 +1,9 @@
+<script setup>
+import { useAuthStore } from '../stores/auth';
+
+const authStore = useAuthStore();
+</script>
+
 <template>
   <nav class="flex items-center justify-between bg-gray-800 p-4">
     <div class="flex items-center">
@@ -5,7 +11,12 @@
         >Home</router-link
       >
     </div>
-    <div class="flex items-center">
+    <div class="flex items-center" v-if="authStore.user">
+      <button @click="authStore.handleLogout" class="text-white mr-4">
+        Logout
+      </button>
+    </div>
+    <div class="flex items-center" v-else>
       <router-link :to="{ name: 'Login' }" class="text-white mr-4"
         >Login</router-link
       >
