@@ -30,6 +30,12 @@ const routes = [
     name: 'FileUpload',
     component: () => import('../components/FileUpload.vue'),
   },
+  // tree view routes
+  {
+    path: '/tree-view',
+    name: 'TreeView',
+    component: () => import('../components/treeview/TreeView.vue'),
+  },
 ];
 
 const router = createRouter({

@@ -99,13 +99,3 @@ const form = ref({
     </div>
   </div>
 </template>
-
-<script>
-export default {
-  name: 'Register',
-};
-</script>
-
-<style>
-/* Add any custom styles here */
-</style>

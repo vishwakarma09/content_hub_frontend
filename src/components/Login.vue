@@ -65,13 +65,3 @@ const form = ref({
     </div>
   </div>
 </template>
-
-<script>
-export default {
-  name: 'Login',
-};
-</script>
-
-<style>
-/* Add any custom styles here */
-</style>
