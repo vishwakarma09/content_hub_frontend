@@ -24,6 +24,12 @@ const routes = [
     name: 'ResetPassword',
     component: () => import('../components/ResetPassword.vue'),
   },
+  // file upload routes
+  {
+    path: '/file-upload',
+    name: 'FileUpload',
+    component: () => import('../components/FileUpload.vue'),
+  },
 ];
 
 const router = createRouter({

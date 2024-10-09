@@ -10,7 +10,11 @@ const authStore = useAuthStore();
       <router-link :to="{ name: 'Home' }" class="text-white mr-4"
         >Home</router-link
       >
+      <router-link :to="{ name: 'FileUpload' }" class="text-white mr-4"
+        >File Upload</router-link
+      >
     </div>
+
     <div class="flex items-center" v-if="authStore.user">
       <button @click="authStore.handleLogout" class="text-white mr-4">
         Logout
