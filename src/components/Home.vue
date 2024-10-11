@@ -4,21 +4,13 @@ import { useAuthStore } from '../stores/auth';
 import { useFileStore } from '../stores/file';
 import TreeView from './treeview/TreeView.vue';
 import FilePath from './filepath/FilePath.vue';
+import FileExplorer from './fileexplorer/FileExplorer.vue';
 
 const authStore = useAuthStore();
-const fileStore = useFileStore();
 
 onMounted(async () => {
   await authStore.getUser();
 });
-
-const addFolder = () => {
-  fileStore.addFolder();
-};
-
-const addFile = () => {
-  fileStore.addFile();
-};
 </script>
 
 <template v-if="authStore.user">
@@ -28,6 +20,7 @@ const addFile = () => {
     </div>
     <div class="w-2/3 bg-white p-8 shadow-md">
       <FilePath />
+      <FileExplorer />
     </div>
   </div>
 </template>

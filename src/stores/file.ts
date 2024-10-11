@@ -173,5 +173,18 @@ export const useFileStore = defineStore({
         console.error(error);
       }
     },
+    async updateNode(node) {
+      console.log('inside updateNode', node);
+      try {
+        await this.getToken();
+        const response = await axios.put(`/api/file-folders/${node.id}`, {
+          _method: 'PUT',
+          ...node,
+        });
+        return response.data;
+      } catch (error) {
+        console.error(error);
+      }
+    },
   },
 });

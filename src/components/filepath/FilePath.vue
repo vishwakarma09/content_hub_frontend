@@ -1,24 +1,15 @@
 <template>
-  <div>
-    <fieldset>
-      <legend>Path:</legend>
+  <div class="breadcrumbs text-sm mb-5">
+    <ul>
       <template v-for="node in ancestors" :key="node.id">
-        <button
-          @click="setCurrentNode(node)"
-          class="bg-cyan-500 text-white m-2"
-        >
-          {{ node.name }}
-        </button>
+        <li>
+          <button @click="setCurrentNode(node)" class="btn-link">
+            {{ node.name }}
+          </button>
+        </li>
       </template>
-    </fieldset>
-    <button @click="populateAncestorsAndDescendents">populate</button>
-    <button @click="addFolder" class="bg-green-500 text-white m-2">
-      Add Folder
-    </button>
-    <button @click="addFile" class="bg-orange-500 text-white m-2">
-      Add File
-    </button>
-    <hr />
+      <li>Add Document</li>
+    </ul>
   </div>
 </template>
 

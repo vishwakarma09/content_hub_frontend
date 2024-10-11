@@ -1,10 +1,6 @@
 <template>
-  <button @click="addFolder" class="bg-green-500 text-white m-2">
-    Add Folder
-  </button>
-  <button @click="addFile" class="bg-orange-500 text-white m-2">
-    Add File
-  </button>
+  <button @click="addFolder" class="btn btn-primary">Add Folder</button>
+  <button @click="addFile" class="btn btn-secondary">Add File</button>
   <tree
     :nodes="nodes"
     :config="config"
@@ -78,8 +74,9 @@ export default {
       console.log('nodeFocused', n);
     },
     nodeEdit(n) {
-      this.fileStore.setCurrentNode(n.id);
+      this.fileStore.setCurrentNode(n);
       console.log('nodeEdit', n);
+      this.fileStore.updateNode(n);
     },
 
     async addFolder() {
