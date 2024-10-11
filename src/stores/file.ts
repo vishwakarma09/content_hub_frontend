@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia';
 import axios from 'axios';
-import { root } from 'postcss';
+import { nextTick } from 'vue';
 
 export const useFileStore = defineStore({
   id: 'file',
@@ -17,6 +17,9 @@ export const useFileStore = defineStore({
     _currentNode: null,
     _rootNode: null,
     _nodes: [],
+    _ancestors: [],
+    _descendents: [],
+    _children: [],
   }),
   getters: {
     user: (state) => state.authUser,
@@ -31,6 +34,9 @@ export const useFileStore = defineStore({
     nodes: (state) => state._nodes,
     rootNode: (state) => state._rootNode,
     config: (state) => state._config,
+    ancestors: (state) => state._ancestors,
+    descendents: (state) => state._descendents,
+    children: (state) => state._children,
   },
   actions: {
     async getToken() {
@@ -71,20 +77,10 @@ export const useFileStore = defineStore({
         console.error(error);
       }
     },
-    async getChildren(node) {
-      try {
-        await this.getToken();
-        const response = await axios.get(`/api/file-folders/${node.id}`);
-        return response.data;
-      } catch (error) {
-        console.error(error);
-      }
-    },
     setCurrentNode(node) {
       this._currentNode = node;
     },
     async addFolder() {
-      console.log('inside addFolder');
       await this.addNode('folder');
     },
     async deleteNode(node) {
@@ -98,25 +94,80 @@ export const useFileStore = defineStore({
       }
     },
     async addNode(type) {
-      console.log('inside addNode', type);
-      let parentId = null;
-      if (!this._currentNode) {
-        parentId = this._rootNode?.id;
-      }
-      if (!parentId) {
-        console.error('No parent id found');
-        return false;
-      }
+      console.log('inside fileStore addNode', type);
+      const parentId = this._currentNode.id;
 
-      console.log('inside add folder', this._currentNode);
+      console.log('inside add folder with parent id', parentId);
       try {
         await this.getToken();
-        const response = await axios.post(`/api/file-folders`, {
+        const response = await axios.post(`/api/file-folders/create-node`, {
           name: 'New Folder',
           text: 'New Folder',
           parent_id: parentId,
           type,
         });
+        console.log('add node response', response.data);
+        const nodeChildren = [];
+        for (const node of response.data.decendents) {
+          this._nodes[node.parent_id] = {
+            text: child.name,
+            children: [],
+            state: {},
+            ...node,
+          };
+          nodeChildren.push(node.id);
+        }
+        this._currentNode.children = nodeChildren;
+        return response.data;
+      } catch (error) {
+        console.error(error);
+      }
+    },
+    async getAncestors() {
+      console.log('inside getAncestors store');
+      try {
+        await this.getToken();
+        const nodeId = this.currentNode.id;
+        const response = await axios.get(
+          `/api/file-folders/${nodeId}/ancestors`
+        );
+        const tmp = response.data;
+        console.log('ancestors in getAncestors', tmp);
+        // push root node in ancestors array if at root
+        if (tmp.length === 0) {
+          this._ancestors = [this._rootNode];
+          console.log('assigned root node to ancestors');
+        } else {
+          this._ancestors = [...tmp, this.currentNode];
+        }
+        return this._ancestors;
+      } catch (error) {
+        console.error(error);
+      }
+    },
+    async getDescendents() {
+      console.log('inside getDescendents store');
+      try {
+        await this.getToken();
+        const nodeId = this.currentNode.id;
+        const response = await axios.get(
+          `/api/file-folders/${nodeId}/descendents`
+        );
+        this._descendents = response.data;
+        return response.data;
+      } catch (error) {
+        console.error(error);
+      }
+    },
+    async getChildren() {
+      console.log('inside getChildren store');
+      try {
+        await this.getToken();
+        const nodeId = this.currentNode.id;
+        const response = await axios.get(
+          `/api/file-folders/${nodeId}/children`
+        );
+        this._children = response.data;
         return response.data;
       } catch (error) {
         console.error(error);

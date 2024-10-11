@@ -10,7 +10,7 @@
     :config="config"
     @nodeOpened="nodeOpened"
     @nodeClosed="nodeClosed"
-    @nodeFocused="nodeFocused"
+    @nodeFocus="nodeFocus"
     @nodeEdit="nodeEdit"
   >
     <template #loading-slot>
@@ -34,65 +34,24 @@ export default {
     tree: treeview,
   },
   data: function () {
-    return {
-      // nodes: {
-      //   1: {
-      //     text: 'text1',
-      //     children: ['11', '12'],
-      //   },
-      //   11: {
-      //     text: 'text11',
-      //   },
-      //   12: {
-      //     text: 'text12',
-      //   },
-      //   2: {
-      //     text: 'text2',
-      //   },
-      //   fileStore: null,
-      // },
-      // config: {
-      //   roots: ['1', '2'],
-      //   leaves: ['fakeid'],
-      //   editable: true,
-      //   keyboardNavigation: true,
-      // },
-    };
+    return {};
   },
   methods: {
     async nodeOpened(n) {
-      console.log('nodeOpened', n.id);
       this.fileStore.setCurrentNode(n);
+
+      console.log('current node is ', this.currentNode);
 
       if (n.children && n.children.length > 0) return;
 
       // set node loading state to tree
       this.currentNode.state.isLoading = true;
 
-      // fake server call
-      // setTimeout(() => {
-      //   // create a fake node
-      //   const id = `${Date.now()}`;
-      //   const newNode = {
-      //     text: `loaded from server`,
-      //     children: [],
-      //     state: {},
-      //   };
-
-      //   // add the node to nodes
-      //   this.nodes[id] = newNode;
-      //   // set children
-      //   n.children = [id];
-      //   // end loading
-      //   n.state.isLoading = false;
-      // }, 2000);
-
       try {
-        console.log('current node is ', this.currentNode);
         const children = await this.fileStore.getChildren(this.currentNode);
 
         const parentChildren = [];
-        for (const child of children.descendents) {
+        for (const child of children) {
           this.nodes[child.id] = {
             text: child.name,
             children: [],
@@ -114,7 +73,7 @@ export default {
       this.fileStore.setCurrentNode(n);
       console.log('nodeClosed', n);
     },
-    nodeFocused(n) {
+    nodeFocus(n) {
       this.fileStore.setCurrentNode(n);
       console.log('nodeFocused', n);
     },
@@ -123,26 +82,13 @@ export default {
       console.log('nodeEdit', n);
     },
 
-    addFolder() {
-      const n = this.fileStore.currentNode;
-
-      // fake server call
-      setTimeout(() => {
-        // create a fake node
-        const id = `${Date.now()}`;
-        const newNode = {
-          text: `new folder from server`,
-          children: [],
-          state: {},
-        };
-
-        // add the node to nodes
-        this.nodes[id] = newNode;
-        // set children
-        n.children = [id];
-        // end loading
-        n.state.isLoading = false;
-      }, 2000);
+    async addFolder() {
+      try {
+        const response = await this.fileStore.addFolder();
+        console.log('add folder response is ', response);
+      } catch (error) {
+        console.log(error);
+      }
     },
     addFile() {
       const n = this.fileStore.currentNode;
@@ -178,7 +124,7 @@ export default {
       const children = await this.fileStore.getChildren(rootNode);
       console.log('children in mounted', children);
       const parentChildren = [];
-      for (const child of children.descendents) {
+      for (const child of children) {
         this.nodes[child.id] = {
           text: child.name,
           children: [],
