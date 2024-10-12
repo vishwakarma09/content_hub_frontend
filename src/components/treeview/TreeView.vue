@@ -1,6 +1,6 @@
 <template>
-  <button @click="addFolder" class="btn btn-primary">Add Folder</button>
-  <button @click="addFile" class="btn btn-secondary">Add File</button>
+  <button @click="addFolder" class="btn btn-primary btn-sm">Add Folder</button>
+  <button @click="addFile" class="btn btn-secondary btn-sm">Add File</button>
   <tree
     :nodes="nodes"
     :config="config"

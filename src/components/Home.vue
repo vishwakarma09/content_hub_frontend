@@ -5,6 +5,7 @@ import { useFileStore } from '../stores/file';
 import TreeView from './treeview/TreeView.vue';
 import FilePath from './filepath/FilePath.vue';
 import FileExplorer from './fileexplorer/FileExplorer.vue';
+import FileUpload from './FileUpload.vue';
 
 const authStore = useAuthStore();
 
@@ -20,6 +21,7 @@ onMounted(async () => {
     </div>
     <div class="w-2/3 bg-white p-8 shadow-md">
       <FilePath />
+      <FileUpload />
       <FileExplorer />
     </div>
   </div>

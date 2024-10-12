@@ -1,14 +1,14 @@
 <template>
   <div class="breadcrumbs text-sm mb-5">
     <ul>
-      <template v-for="node in ancestors" :key="node.id">
-        <li>
+      <template v-for="(node, key) in ancestors" :key="node.id">
+        <li v-if="key !== ancestors.length - 1">
           <button @click="setCurrentNode(node)" class="btn-link">
             {{ node.name }}
           </button>
         </li>
+        <li v-else>{{ node.name }}</li>
       </template>
-      <li>Add Document</li>
     </ul>
   </div>
 </template>
@@ -47,6 +47,9 @@ export default {
   watch: {
     currentNode: async function (newVal, oldVal) {
       await this.makePath();
+    },
+    ancestors: function (newVal, oldVal) {
+      console.log('ancestors are ', newVal.length);
     },
   },
 };

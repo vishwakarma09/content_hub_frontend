@@ -56,6 +56,8 @@ export const useFileStore = defineStore({
       this.fileErrors = [];
       try {
         await this.getToken();
+        data.parent_id = this.currentNode.id;
+        console.log('data in handleUpload', data);
         const response = await axios.post('/api/file-folders', data);
         console.log(response.data);
         // this.router.push({ name: 'Home' });
@@ -77,8 +79,9 @@ export const useFileStore = defineStore({
         console.error(error);
       }
     },
-    setCurrentNode(node) {
+    async setCurrentNode(node) {
       this._currentNode = node;
+      await this.getChildren();
     },
     async addFolder() {
       await this.addNode('folder');
