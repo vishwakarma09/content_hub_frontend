@@ -2,6 +2,9 @@ import { createRouter, createWebHistory } from 'vue-router';
 
 import Home from '../components/Home.vue';
 
+// check for authUser from auth store
+import { useAuthStore } from '../stores/auth';
+
 const routes = [
   { path: '/', name: 'Home', component: Home },
   {
@@ -41,6 +44,16 @@ const routes = [
 const router = createRouter({
   history: createWebHistory(),
   routes,
+});
+
+router.beforeEach((to, from, next) => {
+  const authStore = useAuthStore();
+  const openRoutes = ['Login', 'Register', 'ForgotPassword', 'ResetPassword'];
+  console.log('router auth beforeEach', to.name, authStore.authUser);
+  if (!openRoutes.includes(to.name) && !authStore.authUser) {
+    console.log('router auth sending back to login');
+    next({ name: 'Login' });
+  } else next();
 });
 
 export default router;

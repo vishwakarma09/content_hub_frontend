@@ -25,7 +25,7 @@ const form = ref({
             type="text"
             v-model="form.name"
             id="name"
-            class="w-full border border-gray-300 rounded py-2 px-3 focus:outline-none focus:border-blue-500"
+            class="w-full border border-gray-300 rounded py-2 px-3 focus:outline-none focus:border-blue-500 text-white"
             placeholder="Enter your name"
           />
           <div v-if="authStore.errors.name">
@@ -42,7 +42,7 @@ const form = ref({
             type="email"
             v-model="form.email"
             id="email"
-            class="w-full border border-gray-300 rounded py-2 px-3 focus:outline-none focus:border-blue-500"
+            class="w-full border border-gray-300 rounded py-2 px-3 focus:outline-none focus:border-blue-500 text-white"
             placeholder="Enter your email"
           />
           <div v-if="authStore.errors.email">
@@ -61,7 +61,7 @@ const form = ref({
             type="password"
             id="password"
             v-model="form.password"
-            class="w-full border border-gray-300 rounded py-2 px-3 focus:outline-none focus:border-blue-500"
+            class="w-full border border-gray-300 rounded py-2 px-3 focus:outline-none focus:border-blue-500 text-white"
             placeholder="Enter your password"
           />
           <div v-if="authStore.errors.password">
@@ -80,7 +80,7 @@ const form = ref({
             type="password"
             id="password_confirmation"
             v-model="form.password_confirmation"
-            class="w-full border border-gray-300 rounded py-2 px-3 focus:outline-none focus:border-blue-500"
+            class="w-full border border-gray-300 rounded py-2 px-3 focus:outline-none focus:border-blue-500 text-white"
             placeholder="Re-enter your password"
           />
           <div v-if="authStore.errors.password">

@@ -4,13 +4,14 @@ import { nextTick } from 'vue';
 
 export const useFileStore = defineStore({
   id: 'file',
+  persist: true,
   state: () => ({
     authUser: null,
     fileErrors: [],
     fileStatus: null,
     _config: {
-      roots: ['1', '2'],
-      leaves: ['fakeid'],
+      roots: [],
+      leaves: [],
       editable: true,
       keyboardNavigation: true,
     },
@@ -73,7 +74,14 @@ export const useFileStore = defineStore({
       try {
         await this.getToken();
         const response = await axios.get('/api/file-folders/get-root');
-        this._rootNode = response.data.root;
+        this._rootNode = {
+          ...response.data.root,
+          text: response.data.root.name,
+        };
+
+        // fill root node in _config
+        this._config.roots = [this._rootNode.id];
+
         return this._rootNode;
       } catch (error) {
         console.error(error);

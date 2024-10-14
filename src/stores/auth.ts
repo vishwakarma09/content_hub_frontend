@@ -3,6 +3,7 @@ import axios from 'axios';
 
 export const useAuthStore = defineStore({
   id: 'auth',
+  persist: true,
   state: () => ({
     authUser: null,
     authErrors: [],
@@ -36,6 +37,10 @@ export const useAuthStore = defineStore({
           password: data.password,
         });
         console.log(response.data);
+
+        // set auth user in store
+        await this.getUser();
+        // finally, redirect to home
         this.router.push({ name: 'Home' });
       } catch (error) {
         if (error.response.status === 422) {
@@ -66,7 +71,7 @@ export const useAuthStore = defineStore({
       try {
         await axios.post('/logout');
         this.authUser = null;
-        this.router.push('/');
+        this.router.push({ name: 'Login' });
       } catch (error) {
         console.error(error);
       }
