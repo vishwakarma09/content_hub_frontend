@@ -1,10 +1,9 @@
 <template>
   <div class="bg-white p-8 shadow-md">
     <ul>
-      <p>
-        {{ JSON.stringify(sharedWith) }}
-      </p>
-      <li v-for="user in sharedWith" :key="user.user_id">{{ user.user_id }}</li>
+      <li v-for="user in sharedWith" :key="user.email" class="text-black">
+        {{ user.email }}
+      </li>
     </ul>
     <form @submit.prevent="addSharedWith(form)">
       <div class="mb-4">
@@ -29,40 +28,44 @@
   </div>
 </template>
 
-<script setup>
-import { onMounted, ref } from 'vue';
+<script>
+import { computed, onMounted, ref } from 'vue';
 import { useShareStore } from '../../stores/share';
-const shareStore = useShareStore();
+import { mapState, mapGetters } from 'pinia';
 
-const form = ref({
-  email: '',
-});
-
-const sharedWith = [];
-
-onMounted(() => {
-  getSharedWith();
-});
-
-async function getSharedWith() {
-  try {
-    const response = await shareStore.getSharedWith();
-    sharedWith.push(...response);
-    console.log('Sharing.vue getSharedWith sharedWith', sharedWith);
-  } catch (error) {
-    console.log(error);
-  }
-}
-
-async function addSharedWith(form) {
-  try {
-    console.log('Sharing.vue addSharedWith form', form);
-    const response = await shareStore.addSharedWith(form);
-    console.log(response);
-    // Refresh the sharedWith list after adding a new user
-    await getSharedWith();
-  } catch (error) {
-    console.log(error);
-  }
-}
+export default {
+  data: function () {
+    return {
+      form: ref({
+        email: '',
+      }),
+    };
+  },
+  methods: {
+    async getSharedWith() {
+      try {
+        const response = await shareStore.getSharedWith();
+        console.log(shareStore.sharedWith);
+      } catch (error) {
+        console.log(error);
+      }
+    },
+    async addSharedWith(form) {
+      try {
+        console.log('Sharing.vue addSharedWith form', form);
+        const response = await shareStore.addSharedWith(form);
+        console.log(response); // rely on store to refresh shared with list
+      } catch (error) {
+        console.log(error);
+      }
+    },
+  },
+  mounted: async function () {
+    this.shareStore = useShareStore();
+    await this.shareStore.getSharedWith();
+  },
+  computed: {
+    ...mapGetters(useShareStore, ['sharedWith']),
+  },
+};
 </script>

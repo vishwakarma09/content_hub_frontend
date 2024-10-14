@@ -71,6 +71,8 @@ export const useAuthStore = defineStore({
       try {
         await axios.post('/logout');
         this.authUser = null;
+        // destroy pinia store
+        localStorage.clear();
         this.router.push({ name: 'Login' });
       } catch (error) {
         console.error(error);

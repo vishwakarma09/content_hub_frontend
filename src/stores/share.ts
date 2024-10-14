@@ -56,6 +56,7 @@ export const useShareStore = defineStore({
         const nodeId = this._currentNode.id;
         const response = await axios.get(`/api/file-folders/${nodeId}/share`);
         this._sharedWith = response.data;
+        console.log('sharedWith', this._sharedWith);
         return response.data;
       } catch (error) {
         console.error(error);
@@ -69,6 +70,7 @@ export const useShareStore = defineStore({
         const response = await axios.post(`/api/file-folders/${nodeId}/share`, {
           email_id: data.email,
         });
+        await this.getSharedWith(); // refresh _sharedWith list
         return response.data;
       } catch (error) {
         console.error(error);

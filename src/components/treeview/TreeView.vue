@@ -18,7 +18,6 @@
 </template>
 
 <script>
-import { nextTick } from 'vue';
 import treeview from 'vue3-treeview';
 import 'vue3-treeview/dist/style.css';
 import './progress.css';
