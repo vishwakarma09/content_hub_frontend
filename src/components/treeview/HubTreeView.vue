@@ -31,7 +31,7 @@
 import treeview from 'vue3-treeview';
 import 'vue3-treeview/dist/style.css';
 import './progress.css';
-import { useFileStore } from '../../stores/file';
+import { useHubStore } from '../../stores/hub';
 import { mapState, mapGetters } from 'pinia';
 import { root } from 'postcss';
 
@@ -44,7 +44,7 @@ export default {
   },
   methods: {
     async nodeOpened(n) {
-      this.fileStore.setCurrentNode(n);
+      this.hubStore.setCurrentNode(n);
 
       console.log('current node is ', this.currentNode);
 
@@ -54,7 +54,7 @@ export default {
       this.currentNode.state.isLoading = true;
 
       try {
-        const children = await this.fileStore.getChildren(this.currentNode);
+        const children = await this.hubStore.getChildren(this.currentNode);
 
         const parentChildren = [];
         for (const child of children) {
@@ -77,29 +77,29 @@ export default {
       }
     },
     nodeClosed(n) {
-      this.fileStore.setCurrentNode(n);
+      this.hubStore.setCurrentNode(n);
       console.log('nodeClosed', n);
     },
     nodeFocus(n) {
-      this.fileStore.setCurrentNode(n);
+      this.hubStore.setCurrentNode(n);
       console.log('nodeFocused', n);
     },
     nodeEdit(n) {
       console.log('nodeEdit', n);
-      this.fileStore.setCurrentNode(n);
-      this.fileStore.updateNode(n);
+      this.hubStore.setCurrentNode(n);
+      this.hubStore.updateNode(n);
     },
 
     async addFolder() {
       try {
-        const response = await this.fileStore.addFolder();
+        const response = await this.hubStore.addFolder();
         console.log('add folder response is ', response);
       } catch (error) {
         console.log(error);
       }
     },
     addFile() {
-      const n = this.fileStore.currentNode;
+      const n = this.hubStore.currentNode;
 
       // fake server call
       setTimeout(() => {
@@ -122,18 +122,18 @@ export default {
   },
   mounted: async function () {
     console.log('mounted of tree view component');
-    this.fileStore = useFileStore();
+    this.hubStore = useHubStore();
 
     // get root node
     try {
-      await this.fileStore.getRootNode();
+      await this.hubStore.getRootNode();
     } catch (error) {
       console.error(error);
     }
   },
   computed: {
-    ...mapState(useFileStore, ['nodes', 'config']),
-    ...mapGetters(useFileStore, ['currentNode']),
+    ...mapState(useHubStore, ['nodes', 'config']),
+    ...mapGetters(useHubStore, ['currentNode']),
   },
 };
 </script>

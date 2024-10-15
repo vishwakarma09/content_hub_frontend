@@ -1,7 +1,7 @@
 import { defineStore } from 'pinia';
 import axios from 'axios';
 
-export const useHub = defineStore({
+export const useHubStore = defineStore({
   id: 'hub',
   persist: true,
   state: () => ({
@@ -72,18 +72,15 @@ export const useHub = defineStore({
       try {
         await this.getToken();
         const response = await axios.get('/api/file-folders/get-hub-root');
-        this._rootNode = {
-          id: '' + response.data.root.id,
-          text: response.data.root.name,
-          state: {},
-          children: [],
-        };
+        this._rootNode = response.data.root;
+        this._rootNode.id = '' + this._rootNode.id; // make string
 
         // reset nodes
         this._nodes = [];
 
         // append children to root node
-        for (const child of response.data.children) {
+        const rootChildren = [];
+        for (const child of response.data.root.children) {
           child.id = '' + child.id; // make string
           this._nodes[child.id] = {
             id: child.id,
@@ -91,14 +88,17 @@ export const useHub = defineStore({
             children: [],
             state: {},
           };
-          this._rootNode.children.push(child.id);
+          rootChildren.push(child.id);
         }
+
+        // empty root node children
+        this._rootNode.children = rootChildren;
 
         // add root node to nodes
         this._nodes[this._rootNode.id] = this._rootNode;
 
         // fill root node in _config
-        this._config.roots = [this._rootNode.id];
+        this._config.roots = [...rootChildren];
 
         return this._rootNode;
       } catch (error) {

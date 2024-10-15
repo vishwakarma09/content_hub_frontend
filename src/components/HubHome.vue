@@ -1,15 +1,22 @@
 <script setup lang="ts">
 import { onMounted } from 'vue';
 import { useAuthStore } from '../stores/auth';
+import { useHubStore } from '../stores/hub';
 import HubTreeView from './treeview/HubTreeView.vue';
 import HubFilePath from './filepath/HubFilePath.vue';
 import HubFileExplorer from './fileexplorer/HubFileExplorer.vue';
 import HubFileUpload from './HubFileUpload.vue';
 
 const authStore = useAuthStore();
+const hubStore = useHubStore();
 
 onMounted(async () => {
-  await authStore.getUser();
+  try {
+    await authStore.getUser();
+    await hubStore.getRootNode();
+  } catch (error) {
+    console.error(error);
+  }
 });
 </script>
 
@@ -23,6 +30,8 @@ onMounted(async () => {
       >
     </div>
     <div class="w-2/3 bg-white p-8 shadow-md">
+      <div class="text-lg">Shared with me</div>
+
       <HubFilePath />
       <HubFileUpload />
       <HubFileExplorer />

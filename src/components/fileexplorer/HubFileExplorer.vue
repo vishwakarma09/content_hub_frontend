@@ -1,6 +1,6 @@
 <script setup>
 import { ref, onMounted } from 'vue';
-import { useFileStore } from '../../stores/file';
+import { useHubStore } from '../../stores/hub';
 import { useShareStore } from '../../stores/share';
 import { FolderIcon } from '@heroicons/vue/24/solid';
 import { DocumentIcon } from '@heroicons/vue/24/solid';
@@ -8,7 +8,7 @@ import ContextMenu from 'primevue/contextmenu';
 import Dialog from 'primevue/dialog';
 import Sharing from './Sharing.vue';
 
-const fileStore = useFileStore();
+const hubStore = useHubStore();
 const shareStore = useShareStore();
 
 const menu = ref();
@@ -68,14 +68,14 @@ const openPosition = (pos) => {
 <template>
   <div class="flex grid grid-cols-3 gap-4">
     <div
-      v-for="file in fileStore.children"
+      v-for="file in hubStore.children"
       :key="file.id"
       class="flex items-center justify-center"
     >
       <FolderIcon
         v-if="file.type === 'folder'"
         class="size-36"
-        @click="fileStore.setCurrentNode(file)"
+        @click="hubStore.setCurrentNode(file)"
         @contextmenu="onRightClick($event, file.id)"
       />
       <DocumentIcon

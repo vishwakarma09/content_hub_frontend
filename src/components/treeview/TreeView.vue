@@ -124,12 +124,12 @@ export default {
     console.log('mounted of tree view component');
     this.fileStore = useFileStore();
 
-    // get root node
-    try {
-      await this.fileStore.getRootNode();
-    } catch (error) {
-      console.error(error);
-    }
+    // // get root node
+    // try {
+    //   await this.fileStore.getRootNode();
+    // } catch (error) {
+    //   console.error(error);
+    // }
   },
   computed: {
     ...mapState(useFileStore, ['nodes', 'config']),
