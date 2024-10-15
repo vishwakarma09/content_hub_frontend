@@ -41,9 +41,9 @@ const routes = [
   },
   // shared with me
   {
-    path: '/shared-with-me',
-    name: 'SharedWithMe',
-    component: () => import('../components/shared/SharedWithMe.vue'),
+    path: '/hub-home',
+    name: 'HubHome',
+    component: () => import('../components/HubHome.vue'),
   },
 ];
 

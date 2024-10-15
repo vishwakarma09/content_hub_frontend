@@ -1,8 +1,8 @@
 import { defineStore } from 'pinia';
 import axios from 'axios';
 
-export const useContentHub = defineStore({
-  id: 'contentHub',
+export const useHub = defineStore({
+  id: 'hub',
   persist: true,
   state: () => ({
     authUser: null,
@@ -44,7 +44,6 @@ export const useContentHub = defineStore({
     },
     async getUser() {
       try {
-        console.log('inside authStore.getUser');
         await this.getToken();
         const response = await axios.get('/api/user');
         this.authUser = response.data;
@@ -72,7 +71,7 @@ export const useContentHub = defineStore({
       console.log('inside getRootNode');
       try {
         await this.getToken();
-        const response = await axios.get('/api/file-folders/get-root');
+        const response = await axios.get('/api/file-folders/get-hub-root');
         this._rootNode = {
           id: '' + response.data.root.id,
           text: response.data.root.name,

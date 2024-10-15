@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import { onMounted } from 'vue';
 import { useAuthStore } from '../stores/auth';
-import { useFileStore } from '../stores/file';
 import TreeView from './treeview/TreeView.vue';
 import FilePath from './filepath/FilePath.vue';
 import FileExplorer from './fileexplorer/FileExplorer.vue';
@@ -20,7 +19,7 @@ onMounted(async () => {
       <TreeView />
 
       <RouterLink
-        to="/shared-with-me"
+        to="/hub-home"
         class="btn btn-outline btn-sm btn-block mt-4 mb-4"
         >Shared with me</RouterLink
       >
