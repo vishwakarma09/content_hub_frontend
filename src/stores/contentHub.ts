@@ -1,9 +1,8 @@
 import { defineStore } from 'pinia';
 import axios from 'axios';
-import { nextTick } from 'vue';
 
-export const useFileStore = defineStore({
-  id: 'file',
+export const useContentHub = defineStore({
+  id: 'contentHub',
   persist: true,
   state: () => ({
     authUser: null,

@@ -3,6 +3,9 @@
     <ul>
       <li v-for="user in sharedWith" :key="user.email" class="text-black">
         {{ user.email }}
+        <button class="btn btn-sm btn-danger" @click="removeShareWith(user.id)">
+          Remove
+        </button>
       </li>
     </ul>
     <form @submit.prevent="addSharedWith(form)">
@@ -44,8 +47,8 @@ export default {
   methods: {
     async getSharedWith() {
       try {
-        const response = await shareStore.getSharedWith();
-        console.log(shareStore.sharedWith);
+        const response = await this.shareStore.getSharedWith();
+        console.log(response);
       } catch (error) {
         console.log(error);
       }
@@ -53,7 +56,16 @@ export default {
     async addSharedWith(form) {
       try {
         console.log('Sharing.vue addSharedWith form', form);
-        const response = await shareStore.addSharedWith(form);
+        const response = await this.shareStore.addSharedWith(form);
+        console.log(response); // rely on store to refresh shared with list
+      } catch (error) {
+        console.log(error);
+      }
+    },
+    async removeShareWith(userId) {
+      try {
+        console.log('Sharing.vue removeShareWith id', userId);
+        const response = await this.shareStore.removeShareWith(userId);
         console.log(response); // rely on store to refresh shared with list
       } catch (error) {
         console.log(error);

@@ -39,6 +39,12 @@ const routes = [
     name: 'TreeView',
     component: () => import('../components/treeview/TreeView.vue'),
   },
+  // shared with me
+  {
+    path: '/shared-with-me',
+    name: 'SharedWithMe',
+    component: () => import('../components/shared/SharedWithMe.vue'),
+  },
 ];
 
 const router = createRouter({
@@ -49,9 +55,7 @@ const router = createRouter({
 router.beforeEach((to, from, next) => {
   const authStore = useAuthStore();
   const openRoutes = ['Login', 'Register', 'ForgotPassword', 'ResetPassword'];
-  console.log('router auth beforeEach', to.name, authStore.authUser);
   if (!openRoutes.includes(to.name) && !authStore.authUser) {
-    console.log('router auth sending back to login');
     next({ name: 'Login' });
   } else next();
 });

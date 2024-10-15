@@ -76,5 +76,24 @@ export const useShareStore = defineStore({
         console.error(error);
       }
     },
+    async removeShareWith(userId) {
+      console.log('inside removeShareWith store', userId);
+      try {
+        await this.getToken();
+        const nodeId = this._currentNode.id;
+        const response = await axios.delete(
+          `/api/file-folders/${nodeId}/share`,
+          {
+            data: {
+              user_id: userId,
+            },
+          }
+        );
+        await this.getSharedWith(); // refresh _sharedWith list
+        return response.data;
+      } catch (error) {
+        console.error(error);
+      }
+    },
   },
 });
