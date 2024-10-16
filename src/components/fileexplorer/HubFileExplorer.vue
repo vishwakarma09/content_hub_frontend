@@ -14,19 +14,22 @@ const shareStore = useShareStore();
 const menu = ref();
 const items = ref([
   {
-    label: 'Favorite',
+    label: 'Download',
     icon: 'pi pi-star',
     shortcut: '⌘+D',
-    command: () => {
-      console.log('Favorite');
+    command: async () => {
+      console.log('Download');
+      await hubStore.downloadFile({ id: selectedId.value });
     },
   },
   {
     label: 'Delete',
     icon: 'pi pi-trash',
     shortcut: '⌘+A',
-    command: () => {
+    command: async () => {
       console.log('Delete');
+      await hubStore.deleteFile({ id: selectedId.value });
+      await hubStore.getChildren();
     },
   },
   {

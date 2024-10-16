@@ -15,7 +15,7 @@
 
 <script>
 import { nextTick } from 'vue';
-import { useFileStore } from '../../stores/file';
+import { useHubStore } from '../../stores/hub';
 import { mapState, mapGetters } from 'pinia';
 
 export default {
@@ -26,18 +26,18 @@ export default {
   },
   methods: {
     async makePath() {
-      await this.fileStore.getAncestors();
+      await this.hubStore.getAncestors();
     },
     async setCurrentNode(node) {
-      console.log(node);
-      await this.fileStore.setCurrentNode(node);
+      console.log('HubFilePath setCurrentNode', node);
+      await this.hubStore.setCurrentNode(node);
     },
   },
   mounted: async function () {
-    this.fileStore = useFileStore();
+    this.hubStore = useHubStore();
   },
   computed: {
-    ...mapGetters(useFileStore, [
+    ...mapGetters(useHubStore, [
       'nodes',
       'currentNode',
       'ancestors',

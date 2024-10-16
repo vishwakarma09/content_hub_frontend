@@ -89,6 +89,7 @@ export const useHubStore = defineStore({
             state: {},
           };
           rootChildren.push(child.id);
+          this._children.push(child);
         }
 
         // empty root node children
@@ -98,7 +99,7 @@ export const useHubStore = defineStore({
         this._nodes[this._rootNode.id] = this._rootNode;
 
         // fill root node in _config
-        this._config.roots = [...rootChildren];
+        this._config.roots = [this._rootNode.id];
 
         return this._rootNode;
       } catch (error) {
@@ -216,6 +217,36 @@ export const useHubStore = defineStore({
           _method: 'PUT',
           ...node,
         });
+        return response.data;
+      } catch (error) {
+        console.error(error);
+      }
+    },
+    async downloadFile(node) {
+      console.log('inside downloadFile', node);
+      try {
+        await this.getToken();
+        const response = await axios.get(
+          `/api/file-folders/${node.id}/download`
+        );
+        console.log(response.data);
+        const url = window.URL.createObjectURL(
+          new Blob([atob(response.data.file)])
+        );
+        const link = document.createElement('a');
+        link.href = url;
+        link.setAttribute('download', response.data.filename);
+        document.body.appendChild(link);
+        link.click();
+      } catch (error) {
+        console.error(error);
+      }
+    },
+    async deleteFile(node) {
+      console.log('inside deleteFile', node);
+      try {
+        await this.getToken();
+        const response = await axios.delete(`/api/file-folders/${node.id}`);
         return response.data;
       } catch (error) {
         console.error(error);
