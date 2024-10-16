@@ -15,6 +15,7 @@ const authStore = useAuthStore();
     <div class="flex items-center" v-if="authStore.user">
       <button @click="authStore.handleLogout" class="text-white mr-4">
         Logout
+        <span class="bg-secondary">{{ authStore.user.email }}</span>
       </button>
     </div>
     <div class="flex items-center" v-else>

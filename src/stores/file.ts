@@ -236,7 +236,7 @@ export const useFileStore = defineStore({
         );
         const link = document.createElement('a');
         link.href = url;
-        link.setAttribute('download', response.data.filename);
+        link.setAttribute('download', response.data.fileName);
         document.body.appendChild(link);
         link.click();
       } catch (error) {

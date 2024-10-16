@@ -45,6 +45,12 @@ const routes = [
     name: 'HubHome',
     component: () => import('../components/HubHome.vue'),
   },
+  // public files
+  {
+    path: '/public/:token',
+    name: 'PublicFiles',
+    component: () => import('../components/public/PublicFiles.vue'),
+  },
 ];
 
 const router = createRouter({
@@ -54,7 +60,13 @@ const router = createRouter({
 
 router.beforeEach((to, from, next) => {
   const authStore = useAuthStore();
-  const openRoutes = ['Login', 'Register', 'ForgotPassword', 'ResetPassword'];
+  const openRoutes = [
+    'Login',
+    'Register',
+    'ForgotPassword',
+    'ResetPassword',
+    'PublicFiles',
+  ];
   if (!openRoutes.includes(to.name) && !authStore.authUser) {
     next({ name: 'Login' });
   } else next();

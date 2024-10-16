@@ -6,7 +6,7 @@ export const useShareStore = defineStore({
   persist: true,
   state: () => ({
     _authUser: null,
-    _shareErrors: [],
+    _shareResponse: null,
     _shareStatus: null,
     _currentNode: null,
     _rootNode: null,
@@ -15,10 +15,11 @@ export const useShareStore = defineStore({
     _descendents: [],
     _children: [],
     _sharedWith: [],
+    _metadata: {},
   }),
   getters: {
     user: (state) => state._authUser,
-    errors: (state) => state._shareErrors,
+    response: (state) => state._shareResponse,
     status: (state) => state._shareStatus,
     currentNode: (state) => {
       if (state._currentNode) {
@@ -32,6 +33,7 @@ export const useShareStore = defineStore({
     descendents: (state) => state._descendents,
     children: (state) => state._children,
     sharedWith: (state) => state._sharedWith,
+    metadata: (state) => state._metadata,
   },
   actions: {
     async getToken() {
@@ -70,6 +72,8 @@ export const useShareStore = defineStore({
         const response = await axios.post(`/api/file-folders/${nodeId}/share`, {
           email_id: data.email,
         });
+        this._shareResponse = response.data.message;
+        this._shareStatus = response.data.status;
         await this.getSharedWith(); // refresh _sharedWith list
         return response.data;
       } catch (error) {
@@ -89,8 +93,37 @@ export const useShareStore = defineStore({
             },
           }
         );
+        this._shareResponse = response.data.message;
+        this._shareStatus = response.data.status;
         await this.getSharedWith(); // refresh _sharedWith list
         return response.data;
+      } catch (error) {
+        console.error(error);
+      }
+    },
+    async getMetadata() {
+      try {
+        await this.getToken();
+        const nodeId = this._currentNode.id;
+        const response = await axios.get(
+          `/api/file-folders/${nodeId}/metadata`
+        );
+        this._metadata = response.data;
+        return response.data;
+      } catch (error) {
+        console.error(error);
+      }
+    },
+    async generatePublicLink() {
+      try {
+        await this.getToken();
+        const nodeId = this._currentNode.id;
+        const response = await axios.get(
+          `/api/file-folders/${nodeId}/public-link`
+        );
+        console.log('generatePublicLink', response.data);
+        // refresh metadta
+        await this.getMetadata();
       } catch (error) {
         console.error(error);
       }

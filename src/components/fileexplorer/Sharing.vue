@@ -1,5 +1,8 @@
 <template>
   <div class="bg-white p-8 shadow-md">
+    <div class="text-black bg-secondary" v-if="response">
+      {{ response }}
+    </div>
     <ul>
       <li v-for="user in sharedWith" :key="user.email" class="text-black">
         {{ user.email }}
@@ -21,13 +24,28 @@
           placeholder="Enter your email"
         />
       </div>
-      <button
-        type="submit"
-        class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-      >
-        Add User
-      </button>
+      <button type="submit" class="btn btn-primary btn-sm">Add User</button>
     </form>
+    <div class="mt-4 mb-4 shadow-md">
+      <div class="mb-4">
+        <template v-if="metadata.public_token">
+          <a
+            :href="`${'public/' + metadata.public_token}`"
+            target="_blank"
+            class="btn btn-primary btn-sm"
+            >Open Public Link</a
+          >
+        </template>
+        <template v-else>
+          <button
+            class="btn btn-secondary btn-sm"
+            @click="shareStore.generatePublicLink(metadata.file_folder_id)"
+          >
+            Generate Public Link
+          </button>
+        </template>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -75,9 +93,22 @@ export default {
   mounted: async function () {
     this.shareStore = useShareStore();
     await this.shareStore.getSharedWith();
+    await this.shareStore.getMetadata();
+  },
+  beforeUnmount: function () {
+    console.log('inside unmounted of sharing.vue');
+    this.shareStore.$reset();
   },
   computed: {
-    ...mapGetters(useShareStore, ['sharedWith']),
+    ...mapGetters(useShareStore, [
+      'sharedWith',
+      'metadata',
+      'response',
+      'status',
+    ]),
+    statusBg: () => {
+      this.status ? 'secondary' : 'primary';
+    },
   },
 };
 </script>
