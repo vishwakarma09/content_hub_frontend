@@ -46,7 +46,9 @@ export default {
   },
   watch: {
     currentNode: async function (newVal, oldVal) {
-      await this.makePath();
+      if (newVal) {
+        await this.makePath();
+      }
     },
     ancestors: function (newVal, oldVal) {
       console.log('ancestors are ', newVal.length);

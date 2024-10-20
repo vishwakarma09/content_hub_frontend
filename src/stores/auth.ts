@@ -1,5 +1,8 @@
 import { defineStore } from 'pinia';
 import axios from 'axios';
+import { useFileStore } from './file';
+import { useHubStore } from './hub';
+import { useShareStore } from './share';
 
 export const useAuthStore = defineStore({
   id: 'auth',
@@ -70,8 +73,18 @@ export const useAuthStore = defineStore({
     async handleLogout() {
       try {
         await axios.post('/logout');
+
+        // clear all stores
+        useFileStore().$reset();
+        useHubStore().$reset();
+        useShareStore().$reset();
+
         this.authUser = null;
+
+        // clear local storage
         localStorage.clear();
+
+        // redirect to login
         this.router.push({ name: 'Login' });
       } catch (error) {
         console.error(error);

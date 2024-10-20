@@ -126,7 +126,7 @@ export const useFileStore = defineStore({
     },
     async addNode(type) {
       console.log('inside fileStore addNode', type);
-      const parentId = this._currentNode.id;
+      const parentId = this.currentNode.id;
 
       console.log('inside add folder with parent id', parentId);
       try {
@@ -149,7 +149,7 @@ export const useFileStore = defineStore({
           };
           nodeChildren.push(node.id);
         }
-        this._currentNode.children = nodeChildren;
+        this.currentNode.children = nodeChildren;
         return response.data;
       } catch (error) {
         console.error(error);
