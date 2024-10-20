@@ -142,7 +142,7 @@ export const useFileStore = defineStore({
         for (const node of response.data.descendents) {
           node.id = '' + node.id; // make string
           this._nodes[node.parent_id] = {
-            text: child.name,
+            text: node.name,
             children: [],
             state: {},
             ...node,
